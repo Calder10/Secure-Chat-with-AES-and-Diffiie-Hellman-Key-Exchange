@@ -1,11 +1,17 @@
 from tkinter import *
 from time import sleep 
 import threading
+import os
 import socket
 import pickle
 import diffie_hellman as dh
 import encrypt_decrypt_message as edm
+import configobj
 import AES
+
+config = configobj.ConfigObj('path.b')
+path=config['PG_FILE']
+print (path)
 
 p=None 
 g=None
@@ -78,6 +84,7 @@ def send():
         listbox.insert(END, "Fine comunicazione, chiudi la finestra !")
         listbox.insert(END, "*****************************************************")
         sleep(5)
+        os.remove(path)
         root.destroy()
     else:
         edit_text.delete(0, END)
@@ -102,6 +109,7 @@ def recv():
         edit_text.delete(0, END)
         if plaintext == "Bye":
             print("End of comunication !")
+            os.remove(path)
             listbox.insert(END, "Fine comunicazione, chiudi la finestra !")
             break
         
