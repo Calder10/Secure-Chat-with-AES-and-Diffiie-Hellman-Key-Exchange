@@ -3,6 +3,7 @@ import pickle
 import configobj
 from random import randint
 from Crypto.Util import number
+from Crypto.Random import get_random_bytes
 
 config = configobj.ConfigObj('path.b')
 path=config['PG_FILE']
@@ -15,12 +16,12 @@ tra 1 e p
 """
 def create_p_g():
     while True:
-        p=number.getPrime(SIZE_P_G)
+        p=number.getPrime(SIZE_P_G, randfunc=get_random_bytes)
         if p !=0:
             break
 
     while True:
-        g=number.getRandomInteger(SIZE_P_G)
+        g=number.getRandomInteger(SIZE_P_G,randfunc=get_random_bytes)
         if g<=p and g.bit_length()==1024:
             break
 
