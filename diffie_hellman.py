@@ -21,12 +21,9 @@ def create_p_g():
 
     while True:
         g=getRandomInteger(SIZE_P_G,randfunc=get_random_bytes)
-        if g<=p and g.bit_length()==1024:
+        if g>=1 and g<=p and g.bit_length()==1024:
             break
 
-    
-    #g=number.getRandomRange(1,p+1)
-    #g=randint(1,p)
     parameters={"p":p,"g":g}
     with open(path, 'wb') as handle:
         pickle.dump(parameters, handle, protocol=pickle.HIGHEST_PROTOCOL)
@@ -37,6 +34,7 @@ def upload_p_g():
     p=data['p']
     g=data['g']
     return p,g
+
 # Exponential Squaring (Fast Modulo Multiplication) (quadra e moltiplica)
 def exponentiation(bas, exp,N):
 	if (exp == 0):
@@ -65,9 +63,8 @@ e a partire da quest'ultima la chiave pubblica.
 def create_private_key(p,g):
     while True:
         private_key=getRandomInteger(SIZE_PUBLIC_KEY)
-        if(private_key !=0 and private_key <= p-1):
+        if(private_key >=1 and private_key <= p-1):
             break
-    #private_key=number.getRandomRange(1,p)
     return private_key
  
 
