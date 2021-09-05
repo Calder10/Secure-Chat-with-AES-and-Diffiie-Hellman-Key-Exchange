@@ -1,8 +1,7 @@
 import os
 import pickle
 import configobj
-from random import randint
-from Crypto.Util import number
+from Crypto.Util.number import getPrime,getRandomInteger
 from Crypto.Random import get_random_bytes
 
 config = configobj.ConfigObj('path.b')
@@ -16,12 +15,12 @@ tra 1 e p
 """
 def create_p_g():
     while True:
-        p=number.getPrime(SIZE_P_G, randfunc=get_random_bytes)
+        p=getPrime(SIZE_P_G, randfunc=get_random_bytes)
         if p !=0:
             break
 
     while True:
-        g=number.getRandomInteger(SIZE_P_G,randfunc=get_random_bytes)
+        g=getRandomInteger(SIZE_P_G,randfunc=get_random_bytes)
         if g<=p and g.bit_length()==1024:
             break
 
@@ -65,7 +64,7 @@ e a partire da quest'ultima la chiave pubblica.
 """
 def create_private_key(p,g):
     while True:
-        private_key=number.getRandomInteger(SIZE_PUBLIC_KEY)
+        private_key=getRandomInteger(SIZE_PUBLIC_KEY)
         if(private_key !=0 and private_key <= p-1):
             break
     #private_key=number.getRandomRange(1,p)
