@@ -78,17 +78,20 @@ def send():
     listbox.insert(END, name+":")
     listbox.insert(END, "Plaintext: "+ edit_text.get())
     listbox.insert(END, "Ciphertext: "+ str(ciphertext))
+    listbox.see('end')
     if edit_text.get() == "Bye":
         edit_text.delete(0, END)
         print("End of comunication !")
         listbox.insert(END, "Fine comunicazione, chiudi la finestra !")
         listbox.insert(END, "*****************************************************")
+        listbox.see('end')
         sleep(5)
         os.remove(path)
         root.destroy()
     else:
         edit_text.delete(0, END)
         listbox.insert(END, "*****************************************************")
+        listbox.see('end')
 
 
 def recv():
@@ -107,10 +110,12 @@ def recv():
         listbox.insert(END, "Plaintext: "+ plaintext)
         listbox.insert(END, "*****************************************************")
         edit_text.delete(0, END)
+        listbox.see('end')
         if plaintext == "Bye":
             print("End of comunication !")
             os.remove(path)
             listbox.insert(END, "Fine comunicazione, chiudi la finestra !")
+            listbox.see('end')
             break
         
 def client_gui():
