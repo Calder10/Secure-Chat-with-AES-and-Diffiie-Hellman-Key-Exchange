@@ -13,6 +13,20 @@ b=None
 A=None
 B=None
 K=None
+host=None
+port=None
+server_socket=None
+conn=None
+address=None
+
+def create_server_socket():
+    global host,port,server_socket,conn,address
+    host = socket.gethostname()
+    port = 5000 
+    server_socket = socket.socket()
+    server_socket.bind((host,port))
+    server_socket.listen(1)
+    conn, address = server_socket.accept() 
 
 def set_p_g_parmeters():
     global p,g
@@ -38,18 +52,13 @@ def server():
     print("===================================================")
     print("********* SERVER *********")
     print("===================================================")
+    create_server_socket()
     set_p_g_parmeters()
     print_parameters()
     b=dh.create_private_key(p,g)
     print("Private Key", b)
     B=dh.create_public_key(g,p,b)
     print("Public Key",B)
-    host = socket.gethostname()
-    port = 5000 
-    server_socket = socket.socket()
-    server_socket.bind((host,port))
-    server_socket.listen(1)
-    conn, address = server_socket.accept() 
     print("Connection from: " + str(address))
     while True:
         print("Waiting the client publick key:")

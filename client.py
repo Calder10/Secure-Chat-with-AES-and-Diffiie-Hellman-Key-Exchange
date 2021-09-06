@@ -25,8 +25,10 @@ edit_text=None
 listbox=None
 root=None
 scrollbar=None
-
+host=None
+port=None
 client_socket=None
+
 def set_p_g_parmeters():
     global p,g
     p,g=dh.upload_p_g()
@@ -38,23 +40,25 @@ def print_parameters():
     print("p bit size:",p.bit_length())
     print("g bit size:",g.bit_length())
 
-
+def create_client_socket():
+    global host,port,client_socket
+    host = socket.gethostname()
+    port = 5000
+    client_socket = socket.socket()
+    client_socket.connect((host, port))
 
 def init_comm():
-    global a,A,B,K,client_socket,user
+    global a,A,B,K,user
     print("===================================================")
     print("********* CLIENT *********")
     print("===================================================")
+    create_client_socket()
     set_p_g_parmeters()
     print_parameters()
     a=dh.create_private_key(p,g)
     print("Private Key", a)
     A=dh.create_public_key(g,p,a)
     print("Public Key",A)
-    host = socket.gethostname()
-    port = 5000
-    client_socket = socket.socket()
-    client_socket.connect((host, port))
     print("Sending Public Key")
     client_socket.send(str(A).encode())
     while True:
