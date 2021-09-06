@@ -6,8 +6,9 @@ from Crypto.Random import get_random_bytes
 
 config = configobj.ConfigObj('path.b')
 path=config['PG_FILE']
-SIZE_P_G=1024
-SIZE_PUBLIC_KEY=512
+SIZE_PG=1024
+SIZE_PK=512
+
 """
 Funzione che ritorna un numero primo p che ha una dimensione in bit 
 uguale a quella del parametro dato in input e un intero g compreso 
@@ -15,12 +16,12 @@ tra 1 e p
 """
 def create_p_g():
     while True:
-        p=getPrime(SIZE_P_G, randfunc=get_random_bytes)
+        p=getPrime(SIZE_PG, randfunc=get_random_bytes)
         if p !=0:
             break
 
     while True:
-        g=getRandomInteger(SIZE_P_G,randfunc=get_random_bytes)
+        g=getRandomInteger(SIZE_PG,randfunc=get_random_bytes)
         if g>=1 and g<=p and g.bit_length()==1024:
             break
 
@@ -62,7 +63,7 @@ e a partire da quest'ultima la chiave pubblica.
 """
 def create_private_key(p,g):
     while True:
-        private_key=getRandomInteger(SIZE_PUBLIC_KEY)
+        private_key=getRandomInteger(SIZE_PK)
         if(private_key >=1 and private_key <= p-1):
             break
     return private_key
