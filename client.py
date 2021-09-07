@@ -62,7 +62,7 @@ def init_comm():
     print("Sending Public Key")
     client_socket.send(str(A).encode())
     while True:
-        print("Waiting the server publick key:")
+        print("Waiting the server public key:")
         B = client_socket.recv(512).decode()
         B = int (B)
         print("I recivied:",B)

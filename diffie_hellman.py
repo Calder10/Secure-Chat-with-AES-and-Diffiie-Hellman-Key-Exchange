@@ -22,7 +22,7 @@ def create_p_g():
 
     while True:
         g=getRandomInteger(SIZE_PG,randfunc=get_random_bytes)
-        if g>=1 and g<=p and g.bit_length()==1024:
+        if g>=1 and g<=p and g.bit_length()==SIZE_PG:
             break
 
     parameters={"p":p,"g":g}
@@ -46,13 +46,8 @@ def exponentiation(bas, exp,N):
 	t = exponentiation(bas, int(exp / 2),N)
 	t = (t * t) % N
 	
-	# if exponent is
-	# even value
 	if (exp % 2 == 0):
 		return t
-		
-	# if exponent is
-	# odd value
 	else:
 		return ((bas % N) * t) % N
 
@@ -71,12 +66,10 @@ def create_private_key(p,g):
 
 def create_public_key(g,p,a):
     public_key=exponentiation(g,a,p)
-    #public_key=(g**a) % p
     return public_key
 
 def create_shared_key(x,y,p):
     shared_key=exponentiation(x,y,p)
-    #shared_key=(x ** y) % p
     return shared_key
 
 
