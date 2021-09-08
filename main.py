@@ -1,6 +1,7 @@
 import diffie_hellman as dh
 import appscript
 
+
 start_server_cmd="cd /Users/salvatorecalderaro/Google\ Drive/Università/Cybersecurity/DH-AES\ Chat/src  && python server.py"
 start_client_cmd="cd /Users/salvatorecalderaro/Google\ Drive/Università/Cybersecurity/DH-AES\ Chat/src  && python client.py"
 

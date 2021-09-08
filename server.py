@@ -1,10 +1,8 @@
 import socket
-from random import choice,shuffle
-from time import sleep
+from random import choice
 import pickle
-from tkinter.font import names
+from lorem_text import lorem
 import diffie_hellman as dh
-import encrypt_decrypt_message as edm
 import AES
 
 p=None 
@@ -37,14 +35,14 @@ def print_parameters():
     print("p:",p)
     print("g:",g)
 
-def create_random_text_list():
-    texts=[]
-    prefix="Random text "
-    for i in range(10):
-        texts.append(prefix + str(i+1))
-    texts.append("Bye")
-    shuffle(texts)
-    return texts
+def create_random_text():
+    c=[0,1]
+    s=choice(c)
+    if(s==0):
+        text="Bye"
+    else:
+        text=lorem.sentence()
+    return text
 
 def server():
     global b,A,B,K
@@ -75,8 +73,6 @@ def server():
     print("Shared Key (Hex)",hex(K))
     K=AES.apply_sha256(K)
     print("Shared Key (Byte)",K)
-    texts=create_random_text_list()
-    print(texts)
     while True:
         print("Waiting for a message...")
         data = conn.recv(1000000)
@@ -88,7 +84,7 @@ def server():
             print("End of comunication !")
             break
         else:
-            plaintext=choice(texts)
+            plaintext=create_random_text()
             if plaintext == "Bye":
                 nonce, ciphertext, tag=AES.encrypt(K,plaintext)
                 print("Ciphertext",ciphertext)
