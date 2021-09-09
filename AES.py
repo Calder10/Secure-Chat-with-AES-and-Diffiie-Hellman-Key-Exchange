@@ -1,9 +1,11 @@
+from Crypto.Hash import SHA256
 from Crypto.Cipher import AES
-from hashlib import sha256
 
 def apply_sha256(key):
-    k=str(key)
-    k = sha256(k.encode()).digest()
+    key=str(key)
+    h = SHA256.new()
+    h.update(key.encode())
+    k = h.digest()
     return k
 
 def encrypt(key,msg):

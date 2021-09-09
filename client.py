@@ -69,9 +69,7 @@ def init_comm():
         print("I recivied:",user)
         break
     K=dh.create_shared_key(B,a,p)
-    print(K.bit_length())
-    print(bin(K))
-    print("Shared Key (Hex) ",hex(K))
+    print("Shared Key",K)
     K=AES.apply_sha256(K)
     print("Shared Key (Byte)",K)
 

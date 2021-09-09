@@ -11,6 +11,7 @@ b=None
 A=None
 B=None
 K=None
+name=None
 host=None
 port=None
 server_socket=None
@@ -44,8 +45,8 @@ def create_random_text():
         text=lorem.sentence()
     return text
 
-def server():
-    global b,A,B,K
+def init_comm():
+    global b,A,B,K,name
     names=["Alice","Bob","Claudia","Giuseppe"]
     print("===================================================")
     print("********* SERVER *********")
@@ -70,9 +71,11 @@ def server():
         conn.send(name.encode())
         break
     K=dh.create_shared_key(A,b,p)
-    print("Shared Key (Hex)",hex(K))
+    print("Shared Key",K)
     K=AES.apply_sha256(K)
     print("Shared Key (Byte)",K)
+
+def comm():
     while True:
         print("Waiting for a message...")
         data = conn.recv(1000000)
@@ -97,6 +100,9 @@ def server():
                 conn.send(pickle.dumps([nonce,ciphertext,tag]))
 
     
+def server():
+    init_comm()
+    comm()
 
 if __name__=="__main__":
     server()
