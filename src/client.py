@@ -1,3 +1,12 @@
+"""
+Università degli Studi Di Palermo
+Corso di Laurea Magistrale in Informatica
+Anno Accademico 2020/2021
+Cybersecurity
+@author:Salvatore Calderaro
+DH-AES256 - Chatter
+"""
+
 from tkinter import *
 from time import sleep 
 import threading
@@ -8,9 +17,6 @@ import diffie_hellman as dh
 import configobj
 import AES
 
-config = configobj.ConfigObj('path.b')
-path=config['PG_FILE']
-print (path)
 
 p=None 
 g=None
@@ -28,10 +34,17 @@ host=None
 port=None
 client_socket=None
 
-def set_p_g_parmeters():
+"""
+Funzionw per il settaggio dei parametri p e g.
+"""
+def set_p_g_parmeters(parameters):
     global p,g
-    p,g=dh.upload_p_g()
+    p=parameters[0]
+    g=parameters[1]
 
+"""
+Funzione per il print dei parametri.
+"""
 def print_parameters():
     print("Client:")
     print("p:",p)
@@ -39,6 +52,9 @@ def print_parameters():
     print("p bit size:",p.bit_length())
     print("g bit size:",g.bit_length())
 
+"""
+Funzione per la creazione della socket
+"""
 def create_client_socket():
     global host,port,client_socket
     host = socket.gethostname()
@@ -46,14 +62,20 @@ def create_client_socket():
     client_socket = socket.socket()
     client_socket.connect((host, port))
 
+"""
+Funzione per l'inizializzazione della comunicazione
+"""
 def init_comm():
     global a,A,B,K,user
     print("===================================================")
     print("********* CLIENT *********")
     print("===================================================")
     create_client_socket()
-    set_p_g_parmeters()
+    parameters=dh.create_p_g()
+    set_p_g_parmeters(parameters)
+    print("Send to Server p,g;")
     print_parameters()
+    client_socket.send(pickle.dumps(parameters))
     a=dh.create_private_key(p,g)
     print("Private Key", a)
     A=dh.create_public_key(g,p,a)
@@ -73,6 +95,9 @@ def init_comm():
     K=AES.apply_sha256(K)
     print("Shared Key (Byte)",K)
 
+"""
+Funzione per l'invio dei messaggi
+"""
 def send():
     global client_socket,scrollbar,root
     nonce, ciphertext, tag=AES.encrypt(K,edit_text.get())
@@ -89,14 +114,15 @@ def send():
         listbox.insert(END, "*****************************************************")
         listbox.see('end')
         sleep(5)
-        os.remove(path)
         root.destroy()
     else:
         edit_text.delete(0, END)
         listbox.insert(END, "*****************************************************")
         listbox.see('end')
 
-
+"""
+Funzione per la ricezione dei messaggi
+"""
 def recv():
     global root,scrollbar,client_socket
     while True:
@@ -116,11 +142,13 @@ def recv():
         listbox.see('end')
         if plaintext == "Bye":
             print("End of comunication !")
-            os.remove(path)
             listbox.insert(END, "Fine comunicazione, chiudi la finestra !")
             listbox.see('end')
             break
-        
+
+"""
+Funzione per la gestione della gui
+"""      
 def client_gui():
     global edit_text,listbox,root
     root = Tk()

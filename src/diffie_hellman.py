@@ -1,11 +1,15 @@
-import os
-import pickle
-import configobj
+"""
+Università degli Studi Di Palermo
+Corso di Laurea Magistrale in Informatica
+Anno Accademico 2020/2021
+Cybersecurity
+@author: Salvatore Calderaro
+DH-AES256 - Chatter
+"""
+
 from Crypto.Util.number import getPrime,getRandomInteger
 from Crypto.Random import get_random_bytes
 
-config = configobj.ConfigObj('path.b')
-path=config['PG_FILE']
 SIZE_PG=1024
 SIZE_PK=512
 
@@ -25,18 +29,13 @@ def create_p_g():
         if g>=1 and g<=p and g.bit_length()==SIZE_PG:
             break
 
-    parameters={"p":p,"g":g}
-    with open(path, 'wb') as handle:
-        pickle.dump(parameters, handle, protocol=pickle.HIGHEST_PROTOCOL)
+    parameters=[p,g]
+    return parameters
 
-def upload_p_g():
-    with open(path, 'rb') as handle:
-        data = pickle.load(handle)
-    p=data['p']
-    g=data['g']
-    return p,g
 
-# Exponential Squaring (Fast Modulo Multiplication) (quadra e moltiplica)
+"""
+Algorimto quadra e moltiplica
+"""
 def exponentiation(bas, exp,N):
 	if (exp == 0):
 		return 1
@@ -63,11 +62,15 @@ def create_private_key(p,g):
             break
     return private_key
  
-
+"""
+Funzione per la creazione della chiave pubblica
+"""
 def create_public_key(g,p,a):
     public_key=exponentiation(g,a,p)
     return public_key
-
+"""
+Funzione per la creazione della chiave condivisa
+"""
 def create_shared_key(x,y,p):
     shared_key=exponentiation(x,y,p)
     return shared_key

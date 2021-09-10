@@ -1,5 +1,13 @@
+"""
+Università degli Studi Di Palermo
+Corso di Laurea Magistrale in Informatica
+Anno Accademico 2020/2021
+Cybersecurity
+@author: Salvatore Calderaro
+DH-AES256 - Chatter
+"""
 import socket
-from random import choice
+from random import randint,choice
 import pickle
 from lorem_text import lorem
 import diffie_hellman as dh
@@ -18,6 +26,9 @@ server_socket=None
 conn=None
 address=None
 
+"""
+Funzione per la creazione della socket
+"""
 def create_server_socket():
     global host,port,server_socket,conn,address
     host = socket.gethostname()
@@ -27,24 +38,38 @@ def create_server_socket():
     server_socket.listen(1)
     conn, address = server_socket.accept() 
 
-def set_p_g_parmeters():
+"""
+Funzione per il settaggio dei parametri p e g,
+"""
+def set_p_g_parmeters(parameters):
     global p,g
-    p,g=dh.upload_p_g()
+    p=parameters[0]
+    g=parameters[1]
 
+"""
+Funzione per la stampa dei parametri p e g
+"""
 def print_parameters():
     print("Server:")
     print("p:",p)
     print("g:",g)
+    print("p bit size:",p.bit_length())
+    print("g bit size:",g.bit_length())
 
+"""
+Funzione per la creazione di un testo random.
+"""
 def create_random_text():
-    c=[0,1]
-    s=choice(c)
+    s=randint(0,5)
     if(s==0):
         text="Bye"
     else:
         text=lorem.sentence()
     return text
 
+"""
+Funzione per l'inizializzazione della comunicazione
+"""
 def init_comm():
     global b,A,B,K,name
     names=["Alice","Bob","Claudia","Giuseppe"]
@@ -52,8 +77,14 @@ def init_comm():
     print("********* SERVER *********")
     print("===================================================")
     create_server_socket()
-    set_p_g_parmeters()
-    print_parameters()
+    while True:
+        print("Waiting p,g from Client...")
+        data = conn.recv(2048)
+        parameters = pickle.loads(data)
+        print("I recivied:")
+        set_p_g_parmeters(parameters)
+        print_parameters()
+        break
     b=dh.create_private_key(p,g)
     print("Private Key", b)
     B=dh.create_public_key(g,p,b)
@@ -75,6 +106,9 @@ def init_comm():
     K=AES.apply_sha256(K)
     print("Shared Key (Byte)",K)
 
+"""
+Funzione per la gestione dell'invio/ricezione dei messaggi.
+"""
 def comm():
     while True:
         print("Waiting for a message...")
