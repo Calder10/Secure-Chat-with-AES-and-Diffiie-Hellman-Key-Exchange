@@ -55,7 +55,7 @@ Funzione che calcola la chiave privata
 scegliendo un intero a compreso tra 1 e p-1 
 e a partire da quest'ultima la chiave pubblica.
 """
-def create_private_key(p,g):
+def create_private_key(p):
     while True:
         private_key=getRandomInteger(SIZE_PK)
         if(private_key >=1 and private_key <= p-1):

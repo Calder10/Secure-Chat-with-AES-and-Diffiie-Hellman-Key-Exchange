@@ -85,7 +85,7 @@ def init_comm():
         set_p_g_parmeters(parameters)
         print_parameters()
         break
-    b=dh.create_private_key(p,g)
+    b=dh.create_private_key(p)
     print("Private Key", b)
     B=dh.create_public_key(g,p,b)
     print("Public Key",B)

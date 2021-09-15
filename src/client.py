@@ -76,7 +76,7 @@ def init_comm():
     print("Send to Server p,g;")
     print_parameters()
     client_socket.send(pickle.dumps(parameters))
-    a=dh.create_private_key(p,g)
+    a=dh.create_private_key(p)
     print("Private Key", a)
     A=dh.create_public_key(g,p,a)
     print("Public Key",A)
