@@ -7,7 +7,7 @@ Cybersecurity
 DH-AES256 - Chatter
 """
 
-from Crypto.Util.number import getPrime,getRandomInteger
+from Crypto.Util.number import getPrime,getNRandomBitInteger
 from Crypto.Random import get_random_bytes
 
 SIZE_PG=1024
@@ -19,14 +19,11 @@ uguale a quella del parametro dato in input e un intero g compreso
 tra 1 e p
 """
 def create_p_g():
-    while True:
-        p=getPrime(SIZE_PG, randfunc=get_random_bytes)
-        if p !=0:
-            break
+    p=getPrime(SIZE_PG, randfunc=get_random_bytes)
 
     while True:
-        g=getRandomInteger(SIZE_PG,randfunc=get_random_bytes)
-        if g>=1 and g<=p and g.bit_length()==SIZE_PG:
+        g=getRandomNBitInteger(SIZE_PG,randfunc=get_random_bytes)
+        if g<p:
             break
 
     parameters=[p,g]
@@ -56,10 +53,7 @@ scegliendo un intero a compreso tra 1 e p-1
 e a partire da quest'ultima la chiave pubblica.
 """
 def create_private_key(p):
-    while True:
-        private_key=getRandomInteger(SIZE_PK)
-        if(private_key >=1 and private_key <= p-1):
-            break
+    private_key=getRandomNBitInteger(SIZE_PK,randfunc=get_random_bytes)
     return private_key
  
 """
